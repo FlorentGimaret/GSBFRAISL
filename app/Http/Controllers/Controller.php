@@ -1,5 +1,5 @@
 <?php
-
+//Commentaire FG
 namespace App\Http\Controllers;
 
 use Illuminate\Foundation\Bus\DispatchesJobs;

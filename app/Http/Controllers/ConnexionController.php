@@ -29,6 +29,7 @@ class ConnexionController extends Controller
             Session::put('id', $id);
             Session::put('nom', $nom);
             Session::put('prenom', $prenom);
+            Session::put('login', $login);
 //            return view('home');
             return redirect('/');
         }
