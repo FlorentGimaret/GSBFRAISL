@@ -16,7 +16,7 @@ class ConnexionController extends Controller
         $login = $request->input('login');
         $pwd = $request->input('pwd'); 
         $gsbFrais = new GsbFrais();
-        $res = $gsbFrais->getInfosVisiteur($login,$pwd);
+        $res = $gsbFrais->getInfosUtilisateurs($login,$pwd);
         if(empty($res)){
             Session::put('id', '0');
             $erreur = "Login ou mot de passe inconnu !";
@@ -27,10 +27,12 @@ class ConnexionController extends Controller
             $id = $visiteur->id;
             $nom =  $visiteur->nom;
             $prenom = $visiteur->prenom;
+            $statut = $visiteur->statut;
             Session::put('id', $id);
             Session::put('nom', $nom);
             Session::put('prenom', $prenom);
             Session::put('login', $login);
+            Session::put('statut', $statut);
 //            return view('home');
             return redirect('/');
         }
