@@ -1,6 +1,6 @@
 @extends('layouts.master')
 @section('content')
-{!! Form::open(['url' => 'login']) !!}  
+{!! Form::open(['url' => 'modifMdp']) !!}  
 <div class="col-md-12 well well-md">
     <center><h1>Authentification</h1></center>
     <div class="form-horizontal">    
@@ -19,7 +19,7 @@
         <div class="form-group">
             <label class="col-md-3 control-label">Mot de passe : </label>
             <div class="col-md-6 col-md-3">
-                <input type="password" name="n2pwd" ng-model="np2wd" class="form-control" placeholder="Retapez votre nouveau mot de passe" required>
+                <input type="password" name="n2pwd" ng-model="n2pwd" class="form-control" placeholder="Retapez votre nouveau mot de passe" required>
             </div>
         </div>
         <div class="form-group">
