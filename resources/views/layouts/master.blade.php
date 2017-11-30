@@ -37,12 +37,26 @@
                         </ul> 
                     </div>
  
-  @else  
+  @elseif (Session::get('statut') == 'v')
                     <a class="navbar-brand" href="#">{{Session::get('nom')}} {{Session::get('prenom')}}</a> 
                     <div class="collapse navbar-collapse" id="navbar-collapse-target">
                         <ul class="nav navbar-nav"> 
                             <li><a href="{{ url('/saisirFraisForfait') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Saisir Frais</a></li>
                             <li><a href="{{ url('/getListeFrais') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Voir Frais</a></li>
+                            <li><a href="{{ url('/modifMdp') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Modifier mot de passe</a></li>
+                            <li><a href="{{ url('/modifInfosPerso') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Modifier mes informations personnelles</a></li>
+                        </ul>  
+                        <ul class="nav navbar-nav navbar-right">                             
+                            <li><a href="{{ url('/Logout') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Se déconnecter</a></li>
+                        </ul> 
+                    </div> 
+ @else
+                     <a class="navbar-brand" href="#">{{Session::get('nom')}} {{Session::get('prenom')}}</a> 
+                    <div class="collapse navbar-collapse" id="navbar-collapse-target">
+                        <ul class="nav navbar-nav"> 
+                            <li><a href="{{ url('/validerFicheFrais') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Valider fiche de frais</a></li>
+                            <li><a href="{{ url('/suivreFicheFrais') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Suivre fiche de frais</a></li>
+                            <li><a href="{{ url('/creeNouveauVisiteur') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Crée nouveau visiteur</a></li>
                         </ul>  
                         <ul class="nav navbar-nav navbar-right">                             
                             <li><a href="{{ url('/Logout') }}" data-toggle="collapse" data-target=".navbar-collapse.in">Se déconnecter</a></li>
