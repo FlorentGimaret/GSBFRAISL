@@ -266,5 +266,15 @@ public function getInfosUtilisateurs($login, $mdp){
 		$req = "update utilisateurs set mdp = :npwd where login= :login";
 		DB::update($req, ['npwd'=>$npwd, 'login'=>$login]);
         }
+        
+        public function VisiteursFichesClo(){
+		$req = "SELECT utilisateurs.id, utilisateurs.nom, utilisateurs.prenom, mois, montantValide
+                FROM utilisateurs INNER JOIN fichefrais ON utilisateurs.id = fichefrais.idVisiteur
+		WHERE utilisateurs.statut LIKE 'v'
+                AND fichefrais.idEtat = 'CL'
+		ORDER BY utilisateurs.nom ASC";
+		$lesLignes = DB::select($req);
+		return $lesLignes;
+	}
 }
 ?>
