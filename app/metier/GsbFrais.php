@@ -228,6 +228,14 @@ public function getInfosUtilisateurs($login, $mdp){
                 $lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur, 'mois'=>$mois]);
                 return $lesLignes;
 	}
+        
+        public function listeVisiteursSuivi(){
+            $req = "select distinct nom from utilisateurs inner join fichefrais on fichefrais.idVisiteur = utilisateurs.id where statut = 'v' and idEtat IN ('RB','VA')";
+            $lesLignes = DB::select($req);
+            return $lesLignes;
+        }
+        
+       
 /**
  * Retourne les informations d'une fiche de frais d'un visiteur pour un mois donné
  * @param $idVisiteur 

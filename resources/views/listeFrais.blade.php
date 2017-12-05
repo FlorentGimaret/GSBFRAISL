@@ -7,6 +7,10 @@
         </div>
         <table class="table table-bordered table-striped table-responsive">
             <thead>
+                
+           
+              
+        
                 <tr>
                     <th style="width:20%">Période</th> 
                     <th style="width:20%">Nb justificatifs</th> 

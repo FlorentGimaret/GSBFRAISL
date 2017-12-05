@@ -59,6 +59,16 @@ Route::get('/modifMdp', 'modifMdpController@affFormModifMdp');
 //modifier mdp controller
 Route::post('/modifMdp', 'modifMdpController@verifMdp');
 
+
+Route::get('/suivreFicheFrais', 'suivreFicheFraisController@affSuivreFicheFrais');
+//modifier mdp controller
+Route::post('/suivreFicheFrais', 'suivreFicheFraisController@verifMdp');
+
+
+
+
+
+
 // Retourner à une vue dont on passe le nom en paramètre
 Route::get('getRetour/{retour}', function($retour){
     return redirect("/".$retour);
