@@ -14,12 +14,15 @@ class GsbFrais{
  * @param $mdp
  * @return l'id, le nom et le prénom sous la forme d'un objet 
 */
-public function getInfosVisiteur($login, $mdp){
-        $req = "select visiteur.id as id, visiteur.nom as nom, visiteur.prenom as prenom from visiteur 
-        where visiteur.login=:login and visiteur.mdp=:mdp";
+    
+    
+public function getInfosUtilisateurs($login, $mdp){
+        $req = "select utilisateurs.id as id, utilisateurs.nom as nom, utilisateurs.prenom as prenom, utilisateurs.statut as statut from utilisateurs
+        where utilisateurs.login=:login and utilisateurs.mdp=:mdp";
         $ligne = DB::select($req, ['login'=>$login, 'mdp'=>$mdp]);
         return $ligne;
 }
+
 /**
  * Retourne sous forme d'un tableau d'objets toutes les lignes de frais hors forfait
  * concernées par les deux arguments
@@ -250,5 +253,10 @@ public function getInfosVisiteur($login, $mdp){
 		where fichefrais.idvisiteur = :idVisiteur and fichefrais.mois = :mois";
 		DB::update($req, ['etat'=>$etat, 'idVisiteur'=>$idVisiteur, 'mois'=>$mois]);
 	}
+        
+        public function majMdp($login,$npwd){
+		$req = "update utilisateurs set mdp = :npwd where login= :login";
+		DB::update($req, ['npwd'=>$npwd, 'login'=>$login]);
+        }
 }
 ?>
