@@ -163,6 +163,20 @@ public function getInfosUtilisateurs($login, $mdp){
 			DB::insert($req, ['idVisiteur'=>$idVisiteur, 'mois'=>$mois, 'unIdFrais'=>$unIdFrais]);
 		 }
 	}
+        
+        public function creeNouveauVisiteur($id,$nom,$prenom,$login,$mdp,$adresse,$cp,$ville,$dateEmbauche,$statut,$mail,$ntel){//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
+		$req = "insert into utilisateurs(id,nom,prenom,login,mdp,adresse,cp,ville,dateEmbauche,statut,mail,ntel) 
+		values(:id,:nom,:prenom,:login,:mdp,:adresse,:cp,:ville,:dateEmbauche,:statut,:mail,:ntel)";
+                
+		DB::insert($req, ['id'=>$id,
+                    'nom'=>$nom,'prenom'=>$prenom,
+                    'login'=>$login,'mdp'=>$mdp,'adresse'=>$adresse,'cp'=>$cp, 
+                    'ville'=>$ville, 'dateEmbauche'=>$dateEmbauche,'statut'=>$statut,'mail'=>$mail,'ntel'=>$ntel]);
+ 
+	}
+        
+        
 /**
  * Crée un nouveau frais hors forfait pour un visiteur un mois donné
  * à partir des informations fournies en paramètre
