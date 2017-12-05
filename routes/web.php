@@ -59,6 +59,17 @@ Route::get('/modifMdp', 'modifMdpController@affFormModifMdp');
 //modifier mdp controller
 Route::post('/modifMdp', 'modifMdpController@verifMdp');
 
+Route::get('/validerFicheFrais', 'ValiderFicheFraisController@affValiderFicheFrais');
+
+Route::get('/voirDetailFrais/{id}/{mois}', 'ValiderFicheFraisController@voirDetailFrais');
+
+Route::get('/suivreFicheFrais', 'suivreFicheFraisController@affSuivreFicheFrais');
+//modifier mdp controller
+Route::post('/suivreFicheFrais', 'suivreFicheFraisController@verifMdp');
+
+
+
+
 Route::get('/creeNouveauVisiteur', 'nouvelutilisateurController@affFormModifUtilisateur');
 //modifier mdp controller
 Route::post('/creeNouveauVisiteur', 'nouvelutilisateurController@validerUtilisateur');
@@ -72,4 +83,6 @@ Route::post('/modifInfosPerso', 'modifInfoController@verifMdp');
 // Retourner à une vue dont on passe le nom en paramètre
 Route::get('getRetour/{retour}', function($retour){
     return redirect("/".$retour);
+    
+
 });
