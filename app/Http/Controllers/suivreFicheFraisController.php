@@ -24,11 +24,15 @@ class suivreFicheFraisController extends Controller
         
     
         $LesVisiteurs = new GsbFrais();
+        $lesMois = new GsbFrais();
         $visiteurs = $LesVisiteurs->listeVisiteursSuivi();
+        $mois = $lesMois->listeMoisSuivi();
         // On affiche la liste des utilisateurs    
-        return view('suivreFicheFrais', compact('visiteurs', 'erreur'));
+        return view('suivreFicheFrais', compact('visiteurs', 'mois', 'erreur'));
     }
     
+    
+    /*
     public function verifMdp(Request $request){
         //récupérer ancien mot de passe
         //vérifier que mdp saisi = ancien mdp
@@ -51,7 +55,7 @@ class suivreFicheFraisController extends Controller
             
             if($mdp1!=$mdp2)
             {
-                $erreur=$erreur . "Les deux nveaux mots de passe ne sont pas identiques.";
+                $erreur=$erreur . "Les deux nouveaux mots de passe ne sont pas identiques.";
             }
             
             if($erreur!="")
@@ -64,6 +68,7 @@ class suivreFicheFraisController extends Controller
                 return redirect()->back()->with('status', 'Mise à jour effectuée!');
             }
             }
-        }
+        }*/
  
 
+}
