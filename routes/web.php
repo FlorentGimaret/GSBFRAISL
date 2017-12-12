@@ -80,6 +80,18 @@ Route::get('/modifInfosPerso', 'modifInfoController@affFormModifMdp');
 Route::post('/modifInfosPerso', 'modifInfoController@verifMdp');
 
 
+
+
+// Suivi des fiches frais
+Route::get('/suiviFicheFrais', 'paiementFicheFraisController@affFormFicheFrais');
+
+Route::post('/suiviFicheFrais', 'paiementFicheFraisController@voirDetailFrais');
+
+
+
+
+
+
 // Retourner à une vue dont on passe le nom en paramètre
 Route::get('getRetour/{retour}', function($retour){
     return redirect("/".$retour);
