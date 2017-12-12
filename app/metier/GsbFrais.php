@@ -282,7 +282,7 @@ public function getInfosUtilisateurs($login, $mdp){
         }
         
         public function VisiteursFichesClo(){
-		$req = "SELECT utilisateurs.id, utilisateurs.nom, utilisateurs.prenom, mois, montantValide
+		$req = "SELECT utilisateurs.id, utilisateurs.nom, utilisateurs.prenom, mois, montantValide, nbJustificatifs
                 FROM utilisateurs INNER JOIN fichefrais ON utilisateurs.id = fichefrais.idVisiteur
 		WHERE utilisateurs.statut LIKE 'v'
                 AND fichefrais.idEtat = 'CL'
@@ -290,5 +290,24 @@ public function getInfosUtilisateurs($login, $mdp){
 		$lesLignes = DB::select($req);
 		return $lesLignes;
 	}
+        
+        public function laFicheVisiteur($idVisiteur, $mois){
+		$req = "SELECT utilisateurs.id, utilisateurs.nom, utilisateurs.prenom, mois, montantValide, nbJustificatifs, dateModif
+                FROM utilisateurs INNER JOIN fichefrais ON utilisateurs.id = fichefrais.idVisiteur
+		WHERE utilisateurs.statut LIKE 'v'
+                AND fichefrais.idEtat = 'CL'
+                AND fichefrais.idVisiteur = :idVisiteur
+                AND fichefrais.mois = :mois";
+		$lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois]);			
+		return $lesLignes[0];
+	}
+        
+        public function validerFicheFrais($idVisiteur, $mois, $montantTotal)
+        {
+            	$req = "UPDATE fichefrais SET montantValide = :montantTotal, idEtat = 'VA', dateModif = DATE(NOW()) WHERE idVisiteur=:idVisiteur AND mois=:mois";
+		$lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'montantTotal'=>$montantTotal]);
+                return $lesLignes;
+        }
+        
 }
 ?>
