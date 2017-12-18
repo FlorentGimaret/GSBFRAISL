@@ -46,7 +46,7 @@
             </tr>
             @endforeach
         </table>
-            <button type="button" class="btn btn-default btn-primary" >Valider</button>
+            <button type="button" class="btn btn-default btn-primary" >Mettre à jour les frais forfait</button>
         </form>
         
         <h3>Liste des frais hors forfait</h3>
@@ -64,7 +64,7 @@
                 <td> {{ $unFHF->libelle }} </td> 
                 <td> {{ $unFHF->date }} </td> 
                 <td> {{ $unFHF->montant }} </td>  
-                <td><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="middle" title=""></span></td>
+                <td><center><span class="glyphicon glyphicon-remove" data-toggle="tooltip" data-placement="middle" title=""></span></center></td>
             </tr>
             @endforeach
             <tr>

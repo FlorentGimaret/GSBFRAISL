@@ -54,7 +54,8 @@ public function getInfosUtilisateurs($login, $mdp){
 */
 	public function getLesFraisForfait($idVisiteur, $mois){
 		$req = "select fraisforfait.id as idfrais, fraisforfait.libelle as libelle, ligneFraisForfait.mois as mois,
-		lignefraisforfait.quantite as quantite from lignefraisforfait inner join fraisforfait 
+		lignefraisforfait.quantite as quantite, montant
+                from lignefraisforfait inner join fraisforfait 
 		on fraisforfait.id = lignefraisforfait.idfraisforfait
 		where lignefraisforfait.idvisiteur = :idVisiteur and lignefraisforfait.mois=:mois
 		order by lignefraisforfait.idfraisforfait";	
@@ -338,11 +339,6 @@ public function getInfosUtilisateurs($login, $mdp){
             DB::update($req_3, ['idVisiteur'=>$idVisiteur, 'mois'=>$mois, 'total'=>$total]);
                     
       
-  }
-  
-  
-  
-  
         }
         
         
@@ -366,6 +362,14 @@ public function getInfosUtilisateurs($login, $mdp){
 		$lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'montantTotal'=>$montantTotal]);
                 return $lesLignes;
         }
+        
+        public function majFF($idVisiteur, $mois, $ETP, $KM, $NUI, $REP)
+        {
+                $req = "UPDATE lignefraisforfait SET quantite = , idEtat = 'VA', dateModif = DATE(NOW()) WHERE idVisiteur=:idVisiteur AND mois=:mois";
+		$lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'montantTotal'=>$montantTotal]);
+                return $lesLignes;
+        }
+        
         
 }
 ?>

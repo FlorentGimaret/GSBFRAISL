@@ -7,7 +7,7 @@
         </div>
         <br/>
         @if($FichesFraisClo==NULL)
-        <div>Il n'y a aucune fiche frais à valider.</div>
+        <div class="alert alert-danger">Il n'y a aucune fiche frais à valider.</div>
         @else
         <table class="table table-bordered table-striped table-responsive">
             <thead>

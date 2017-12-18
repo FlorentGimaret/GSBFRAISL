@@ -26,13 +26,19 @@ class ValiderFicheFraisController extends Controller
         $laFiche = $gsbFrais->laFicheVisiteur($id, $mois);
         $lesFraisForfait = $gsbFrais->getLesFraisForfait($id, $mois);
         $lesFraisHorsForfait = $gsbFrais->getLesFraisHorsForfait($id, $mois);
+        $montantFF = 0;
+        $montantHF = 0;
         $montantTotal = 0;
-        foreach ($lesFraisHorsForfait as $fhf){
-            $montantTotal = $montantTotal + $fhf->montant;
+        foreach ($lesFraisForfait as $ff){
+            $montantFF = $montantFF + $ff->montant*$ff->quantite;
         }
+        foreach ($lesFraisHorsForfait as $fhf){
+            $montantHF = $montantHF + $fhf->montant;
+        }
+        $montantTotal = $montantFF+$montantHF;
         $titreVue = "Détail de la fiche de frais du mois ".$mois;
         $erreur = "";
-        return view('ficheAValider', compact('laFiche','lesFraisForfait', 'lesFraisHorsForfait', 'mois', 'erreur', 'titreVue','montantTotal'));
+        return view('ficheAValider', compact('laFiche','lesFraisForfait', 'lesFraisHorsForfait', 'mois', 'erreur', 'titreVue','montantFF','montantHF', 'montantTotal'));
   }
   
         public function validerFicheFrais($id, $mois, $montantTotal)
@@ -43,6 +49,8 @@ class ValiderFicheFraisController extends Controller
         $erreur = "";
         return view('validerFicheFrais', compact('FichesFraisClo', 'erreur'));
         }
+        
+        
         
         
         
