@@ -6,6 +6,9 @@
             <h1>Valider fiche frais</h1>
         </div>
         <br/>
+        @if($success!=null)
+        <div class="alert alert-success">La fiche a été validée.</div>
+        @endif
         @if($FichesFraisClo==NULL)
         <div class="alert alert-danger">Il n'y a aucune fiche frais à valider.</div>
         @else

@@ -36,7 +36,7 @@ public function getInfosUtilisateurs($login, $mdp){
 */
 	public function getLesFraisHorsForfait($idVisiteur,$mois){
 	    $req = "select * from lignefraishorsforfait where lignefraishorsforfait.idvisiteur =:idVisiteur 
-		and lignefraishorsforfait.mois = :mois ";	
+		and lignefraishorsforfait.mois = :mois AND codeSuppression IS NULL ";	
             $lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur, 'mois'=>$mois]);
 //            for ($i=0; $i<$nbLignes; $i++){
 //                    $date = $lesLignes[$i]['date'];
@@ -359,14 +359,36 @@ public function getInfosUtilisateurs($login, $mdp){
         public function validerFicheFrais($idVisiteur, $mois, $montantTotal)
         {
             	$req = "UPDATE fichefrais SET montantValide = :montantTotal, idEtat = 'VA', dateModif = DATE(NOW()) WHERE idVisiteur=:idVisiteur AND mois=:mois";
-		$lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'montantTotal'=>$montantTotal]);
+		$lesLignes = DB::update($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'montantTotal'=>$montantTotal]);
                 return $lesLignes;
         }
         
         public function majFF($idVisiteur, $mois, $ETP, $KM, $NUI, $REP)
         {
-                $req = "UPDATE lignefraisforfait SET quantite = , idEtat = 'VA', dateModif = DATE(NOW()) WHERE idVisiteur=:idVisiteur AND mois=:mois";
-		$lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'montantTotal'=>$montantTotal]);
+                $req1 = "UPDATE lignefraisforfait SET quantite=:ETP WHERE idVisiteur=:idVisiteur AND mois=:mois AND idFraisForfait='ETP' ";
+		DB::update($req1, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'ETP'=>$ETP]);
+                
+                $req2 = "UPDATE lignefraisforfait SET quantite=:KM WHERE idVisiteur=:idVisiteur AND mois=:mois AND idFraisForfait='KM' ";
+		DB::update($req2, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'KM'=>$KM]);
+                
+                $req3 = "UPDATE lignefraisforfait SET quantite=:NUI WHERE idVisiteur=:idVisiteur AND mois=:mois AND idFraisForfait='NUI' ";
+		DB::update($req3, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'NUI'=>$NUI]);
+                
+                $req4 = "UPDATE lignefraisforfait SET quantite=:REP WHERE idVisiteur=:idVisiteur AND mois=:mois AND idFraisForfait='REP' ";
+		DB::update($req4, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'REP'=>$REP]);
+        }
+        
+        public function affFHF($idVisiteur,$mois,$id,$date,$montant)
+        {
+                $req = "SELECT id, idVisiteur, mois, libelle, date, montant FROM lignefraishorsforfait WHERE idVisiteur=:idVisiteur AND mois=:mois AND id=:id AND date=:date AND montant=:montant ";
+		$lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'id'=>$id,'date'=>$date,'montant'=>$montant]);
+                return $lesLignes;
+        }
+        
+        public function supprimerFHF($id, $txt)
+        {
+            	$req = "UPDATE lignefraishorsforfait SET codeSuppression='s', motifSuppression=:txt WHERE id=:id ";
+		$lesLignes = DB::select($req, ['id'=>$id, 'txt'=>$txt]);
                 return $lesLignes;
         }
         

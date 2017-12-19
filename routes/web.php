@@ -65,6 +65,15 @@ Route::get('/voirDetailFrais/{id}/{mois}', 'ValiderFicheFraisController@voirDeta
 
 Route::get('/listeFicheFrais/{id}/{mois}/{montantTotal}','ValiderFicheFraisController@validerFicheFrais');
 
+Route::post('/majFicheFrais','ValiderFicheFraisController@majFF');
+
+Route::get('/supprimerFHF/{id}/{mois}/{ifF}/{date}/{montant}','ValiderFicheFraisController@affFHF');
+
+Route::post('/fhfSup','ValiderFicheFraisController@supFHF');
+
+
+
+
 
 Route::get('/suivreFicheFrais', 'suivreFicheFraisController@affSuivreFicheFrais');
 //modifier mdp controller
