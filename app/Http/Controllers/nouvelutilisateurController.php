@@ -39,6 +39,8 @@ class nouvelutilisateurController extends Controller
         $chaine='abcdefghijklmnopqrstuvwxyz0123456789';
         $melange=str_shuffle($chaine);
         $mdp = substr($melange, 0, 5); 
+        
+        
 
         $adresse = $request->input('ad');
         $cp = $request->input('cp');
@@ -53,8 +55,10 @@ class nouvelutilisateurController extends Controller
         {
              $erreur .= "votre code postal doit contenir 5 caractères ! \n";
         }
-      
-        
+      if($ntel < 10)
+         {
+             $erreur .= "votre numéro de téléphone doit contenir 10 chiffres ! \n";
+        }
 
         if(strlen($id) > 4)//gérer le message d'erreur
             //regarder pourquoi affichage mise a jour utilisateur ne marche pas

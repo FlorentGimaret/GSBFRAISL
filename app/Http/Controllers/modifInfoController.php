@@ -23,7 +23,7 @@ class modifInfoController extends Controller
         $cp = $request->input('cp'); 
         $ville = $request->input('ville'); 
         $mail = $request->input('mail'); 
-        $tel = $request->input('tel'); 
+        $ntel = $request->input('ntel'); 
         $unFrais = new GsbFrais();
        
         if($cp > 5 && $cp < 5)
@@ -31,7 +31,10 @@ class modifInfoController extends Controller
              $erreur .= "votre code postal doit contenir 5 caractères ! \n";
         }
             
-          
+           if($ntel < 10)
+         {
+             $erreur .= "votre numéro de téléphone doit contenir 10 chiffres ! \n";
+        }
             
             
             if($erreur!="")
