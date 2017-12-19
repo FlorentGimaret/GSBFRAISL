@@ -290,5 +290,9 @@ public function getInfosUtilisateurs($login, $mdp){
 		$lesLignes = DB::select($req);
 		return $lesLignes;
 	}
+         public function majInfo($login,$adr,$cp,$ville,$mail, $tel){
+		$req = "update utilisateurs set adresse = :adr, cp= :cp,ville= :ville, mail= :mail, ntel= :tel where login= :login";
+		DB::update($req, ['adr'=>$adr,'cp'=>$cp,'ville'=>$ville,'mail'=>$mail,'tel'=>$tel, 'login'=>$login]);
+        }
 }
 ?>

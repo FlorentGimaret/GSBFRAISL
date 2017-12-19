@@ -11,41 +11,36 @@ class modifInfoController extends Controller
     
     public function affFormModifMdp(){
         $erreur="";
-        return view('formMofifPerso', compact('erreur'));
+        return view('formModifInfo', compact('erreur'));
     }
     
-    public function verifMdp(Request $request){
-        //récupérer ancien mot de passe
-        //vérifier que mdp saisi = ancien mdp
-        //vérifier que les deux mdp tapés st identiques
-        //si tout est ok, mettre à jour la bdd
+    public function modifinfo(Request $request){
+     
 
         $erreur="";
         $login=Session::get('login');
-        $ancienMdp = $request->input('pwd'); 
+        $adr = $request->input('adr'); 
+        $cp = $request->input('cp'); 
+        $ville = $request->input('ville'); 
+        $mail = $request->input('mail'); 
+        $tel = $request->input('tel'); 
         $unFrais = new GsbFrais();
-        $res = $unFrais->getInfosVisiteur($login,$ancienMdp);
+       
+        if($cp > 5 && $cp < 5)
+        {
+             $erreur .= "votre code postal doit contenir 5 caractères ! \n";
+        }
             
-            if(empty($res)){
-                $erreur = "Ancien mot de passe incorrect ! ";
-                //return view('formModifMdp', compact('erreur'));
-            }
+          
             
-            $mdp1 = $request->input('npwd'); 
-            $mdp2 = $request->input('n2pwd'); 
-            
-            if($mdp1!=$mdp2)
-            {
-                $erreur=$erreur . "Les deux nveaux mots de passe ne sont pas identiques.";
-            }
             
             if($erreur!="")
             {
-                return view('formModifMdp', compact('erreur'));
+                return view('formModifInfo', compact('erreur'));
             }
             else
             {
-                $unFrais->majMdp($login,$mdp2);
+                $unFrais->majInfo($login,$adr,$cp,$ville,$mail, $tel);
                 return redirect()->back()->with('status', 'Mise à jour effectuée!');
             }
             }

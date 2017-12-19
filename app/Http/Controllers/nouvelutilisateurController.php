@@ -11,7 +11,20 @@ class nouvelutilisateurController extends Controller
     
     public function affFormModifUtilisateur(){
         $erreur="";
-        return view('formnouvelutilisateur', compact('erreur'));
+        $id = "";
+        $nom = "";
+        $prenom = "";
+        $login = "";
+        $mdp = "";
+        $adresse = "";
+        $cp = "";
+        $ville = "";
+        $dateEmbauche= ""; 
+        $statut = "";
+        $mail = "";
+        $ntel= "";
+        
+        return view('formnouvelutilisateur', compact('erreur','id','nom','prenom','login','mdp','adresse','cp','ville','dateEmbauche','satut','mail','ntel'));
     }
     
         public function validerUtilisateur(Request $request) {
@@ -21,31 +34,49 @@ class nouvelutilisateurController extends Controller
         $prenom = $request->input('pre');
         $login = substr($prenom,0,1).$nom;
         
-        $mdp = $request->input('mdp');
+        
+        
+        $chaine='abcdefghijklmnopqrstuvwxyz0123456789';
+        $melange=str_shuffle($chaine);
+        $mdp = substr($melange, 0, 5); 
+
         $adresse = $request->input('ad');
         $cp = $request->input('cp');
         $ville = $request->input('ville');
         $dateEmbauche = $request->input('de');
-        $statut = $request->input('st');
+        $statut = "v";
         $mail = $request->input('mail');
-        $ntel= $request->input('tel');
+        $ntel= $request->input('ntel');
         $unFrais = new GsbFrais();
+        
+        if($cp > 5 && $cp < 5)
+        {
+             $erreur .= "votre code postal doit contenir 5 caractères ! \n";
+        }
+      
+        
+
         if(strlen($id) > 4)//gérer le message d'erreur
             //regarder pourquoi affichage mise a jour utilisateur ne marche pas
         {
-            $erreur = "id incorrect ! ";
+            $erreur .= "votre id doit contenir 3 caractères au maximum ! \n";
         }
-        if($erreur!="")
-            {
-               $erreur = $login;
-            }
-        
-        if ($id > 0) {
+       
+       
+        if ($id > 0 && $erreur == "") {
             $unFrais->creeNouveauVisiteur($id,$nom,$prenom,$login,$mdp,$adresse,$cp,$ville,$dateEmbauche,$statut,$mail,$ntel);
         }
+         if($erreur!="")
+            {
+                return view('formnouvelutilisateur', compact('erreur','id','nom','prenom','login','mdp','adresse','cp','ville','dateEmbauche','satut','mail','ntel'));
+            }
+        else {
+     
+             return redirect()->back()->with('status', 'Mise à jour effectuée!');
+            }
         
         // Affiche la liste des FHF de la fiche de Frais en cours
-        return redirect()->back()->with('status', 'Mise à jour effectuée!');
+        
     }
             
 }

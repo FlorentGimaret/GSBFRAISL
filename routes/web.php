@@ -77,7 +77,7 @@ Route::post('/creeNouveauVisiteur', 'nouvelutilisateurController@validerUtilisat
 
 Route::get('/modifInfosPerso', 'modifInfoController@affFormModifMdp');
 //modifier mdp controller
-Route::post('/modifInfosPerso', 'modifInfoController@verifMdp');
+Route::post('/modifInfosPerso', 'modifInfoController@modifinfo');
 
 
 // Retourner à une vue dont on passe le nom en paramètre
