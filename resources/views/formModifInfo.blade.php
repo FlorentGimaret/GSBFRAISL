@@ -32,7 +32,7 @@
         <div class="form-group">
             <label class="col-md-3 control-label">Votre nouveau numero de téléphone :  </label>
             <div class="col-md-6 col-md-3">
-                <input type="number" name="tel" ng-model="tel" class="form-control" placeholder="numero de telephone" required pattern="(?=.*[0-9]).{10}">
+                <input type="number" name="ntel" ng-model="ntel" class="form-control" placeholder="numero de telephone" required pattern="(?=.*[0-9]).{10}">
             </div>
         </div>
         <div class="form-group">

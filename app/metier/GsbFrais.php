@@ -393,9 +393,9 @@ public function getInfosUtilisateurs($login, $mdp){
         }
         
         
-         public function majInfo($login,$adr,$cp,$ville,$mail, $tel){
-		$req = "update utilisateurs set adresse = :adr, cp= :cp,ville= :ville, mail= :mail, ntel= :tel where login= :login";
-		DB::update($req, ['adr'=>$adr,'cp'=>$cp,'ville'=>$ville,'mail'=>$mail,'tel'=>$tel, 'login'=>$login]);
+         public function majInfo($login,$adr,$cp,$ville,$mail, $ntel){
+		$req = "update utilisateurs set adresse = :adr, cp= :cp,ville= :ville, mail= :mail, ntel= :ntel where login= :login";
+		DB::update($req, ['adr'=>$adr,'cp'=>$cp,'ville'=>$ville,'mail'=>$mail,'ntel'=>$ntel, 'login'=>$login]);
         }
 }
 ?>
