@@ -67,15 +67,13 @@ class nouvelutilisateurController extends Controller
         }
        
        
-        if ($id > 0 && $erreur == "") {
-            $unFrais->creeNouveauVisiteur($id,$nom,$prenom,$login,$mdp,$adresse,$cp,$ville,$dateEmbauche,$statut,$mail,$ntel);
-        }
+       
          if($erreur!="")
             {
                 return view('formnouvelutilisateur', compact('erreur','id','nom','prenom','login','mdp','adresse','cp','ville','dateEmbauche','satut','mail','ntel'));
             }
         else {
-     
+     $unFrais->creeNouveauVisiteur($id,$nom,$prenom,$login,$mdp,$adresse,$cp,$ville,$dateEmbauche,$statut,$mail,$ntel);
              return redirect()->back()->with('status', 'Mise à jour effectuée!');
             }
         
