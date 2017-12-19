@@ -15,8 +15,9 @@ class ConnexionController extends Controller
     public function logIn(Request $request) {
         $login = $request->input('login');
         $pwd = $request->input('pwd'); 
+        $pwdH=MD5($pwd);
         $gsbFrais = new GsbFrais();
-        $res = $gsbFrais->getInfosUtilisateurs($login,$pwd);
+        $res = $gsbFrais->getInfosUtilisateurs($login,$pwdH);
         if(empty($res)){
             Session::put('id', '0');
             $erreur = "Login ou mot de passe inconnu !";

@@ -36,7 +36,7 @@ public function getInfosUtilisateurs($login, $mdp){
 */
 	public function getLesFraisHorsForfait($idVisiteur,$mois){
 	    $req = "select * from lignefraishorsforfait where lignefraishorsforfait.idvisiteur =:idVisiteur 
-		and lignefraishorsforfait.mois = :mois ";	
+		and lignefraishorsforfait.mois = :mois AND codeSuppression IS NULL ";	
             $lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur, 'mois'=>$mois]);
 //            for ($i=0; $i<$nbLignes; $i++){
 //                    $date = $lesLignes[$i]['date'];
@@ -54,7 +54,8 @@ public function getInfosUtilisateurs($login, $mdp){
 */
 	public function getLesFraisForfait($idVisiteur, $mois){
 		$req = "select fraisforfait.id as idfrais, fraisforfait.libelle as libelle, ligneFraisForfait.mois as mois,
-		lignefraisforfait.quantite as quantite from lignefraisforfait inner join fraisforfait 
+		lignefraisforfait.quantite as quantite, montant
+                from lignefraisforfait inner join fraisforfait 
 		on fraisforfait.id = lignefraisforfait.idfraisforfait
 		where lignefraisforfait.idvisiteur = :idVisiteur and lignefraisforfait.mois=:mois
 		order by lignefraisforfait.idfraisforfait";	
@@ -244,10 +245,18 @@ public function getInfosUtilisateurs($login, $mdp){
 	}
         
         public function listeVisiteursSuivi(){
-            $req = "select distinct nom from utilisateurs inner join fichefrais on fichefrais.idVisiteur = utilisateurs.id where statut = 'v' and idEtat IN ('RB','VA')";
+            $req = "select distinct id from utilisateurs inner join fichefrais on fichefrais.idVisiteur = utilisateurs.id where statut = 'v' and idEtat IN ('RB','VA')";
             $lesLignes = DB::select($req);
             return $lesLignes;
         }
+        
+        public function listeMoisSuivi(){
+            $req = "select distinct mois from utilisateurs inner join fichefrais on fichefrais.idVisiteur = utilisateurs.id where statut = 'v' and idEtat IN ('RB','VA') order by mois desc limit 12";
+            $lesLignes = DB::select($req);
+            return $lesLignes;
+        }
+        
+        
         
        
 /**
@@ -282,7 +291,7 @@ public function getInfosUtilisateurs($login, $mdp){
         }
         
         public function VisiteursFichesClo(){
-		$req = "SELECT utilisateurs.id, utilisateurs.nom, utilisateurs.prenom, mois, montantValide
+		$req = "SELECT utilisateurs.id, utilisateurs.nom, utilisateurs.prenom, mois, montantValide, nbJustificatifs
                 FROM utilisateurs INNER JOIN fichefrais ON utilisateurs.id = fichefrais.idVisiteur
 		WHERE utilisateurs.statut LIKE 'v'
                 AND fichefrais.idEtat = 'CL'
@@ -290,6 +299,100 @@ public function getInfosUtilisateurs($login, $mdp){
 		$lesLignes = DB::select($req);
 		return $lesLignes;
 	}
+        
+        
+        
+        
+        // Requete détail suivi fiche frais
+        
+        public function getPaiementFicheFrais($idVisiteur, $mois){
+            $req = "SELECT utilisateurs.id, utilisateurs.nom, utilisateurs.prenom, mois, montantValide, nbJustificatifs, dateModif
+                FROM utilisateurs INNER JOIN fichefrais ON utilisateurs.id = fichefrais.idVisiteur
+		WHERE utilisateurs.statut LIKE 'v'
+                AND fichefrais.idEtat = 'VA' or 'RB'
+                AND fichefrais.idVisiteur = :idVisiteur
+                AND fichefrais.mois = :mois";
+		$lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois]);			
+		return $lesLignes[0];
+	}
+        
+        
+        
+        
+        // Calcul montant fiche clôture
+        public function montantFicheCloture($mois, $idVisiteur){
+            $req_1 = 'select sum(quantite*montant) as montantFrais from fraisforfait inner join lignefraisforfait on lignefraisforfait.idFraisForfait = fraisforfait.id where idVisiteur = :idVisiteur and mois = :mois';
+      
+            $req_2 = 'select sum(montant) as montantHorsForfait from lignefraishorsforfait  where idVisiteur = :idVisiteur and mois = :mois';
+            
+            $ligneFraisForfait = DB::select($req_1, ['idVisiteur'=>$idVisiteur,'mois'=>$mois]);
+            $ligneFraisHorsForfait = DB::select($req_2, ['idVisiteur'=>$idVisiteur,'mois'=>$mois]);
+            
+            
+            $SommeFraisForfait = $ligneFraisForfait[0]->montantValide;
+            $SommeFraisHorsForfait = $ligneFraisHorsForfait[0]->montantHorsForfait;
+            
+            
+            $total = $SommeFraisForfait + $SommeFraisHorsForfait;
+            
+            $req_3 = 'update fichefrais set montantValide = :total, idEtat = "CL" where idVisiteur = :idVisiteur and mois = :mois';
+            DB::update($req_3, ['idVisiteur'=>$idVisiteur, 'mois'=>$mois, 'total'=>$total]);
+                    
+      
+        }
+        
+        
+        
+        
+
+        public function laFicheVisiteur($idVisiteur, $mois){
+		$req = "SELECT utilisateurs.id, utilisateurs.nom, utilisateurs.prenom, mois, montantValide, nbJustificatifs, dateModif
+                FROM utilisateurs INNER JOIN fichefrais ON utilisateurs.id = fichefrais.idVisiteur
+		WHERE utilisateurs.statut LIKE 'v'
+                AND fichefrais.idEtat = 'CL'
+                AND fichefrais.idVisiteur = :idVisiteur
+                AND fichefrais.mois = :mois";
+		$lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois]);			
+		return $lesLignes[0];
+	}
+        
+        public function validerFicheFrais($idVisiteur, $mois, $montantTotal)
+        {
+            	$req = "UPDATE fichefrais SET montantValide = :montantTotal, idEtat = 'VA', dateModif = DATE(NOW()) WHERE idVisiteur=:idVisiteur AND mois=:mois";
+		$lesLignes = DB::update($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'montantTotal'=>$montantTotal]);
+                return $lesLignes;
+        }
+        
+        public function majFF($idVisiteur, $mois, $ETP, $KM, $NUI, $REP)
+        {
+                $req1 = "UPDATE lignefraisforfait SET quantite=:ETP WHERE idVisiteur=:idVisiteur AND mois=:mois AND idFraisForfait='ETP' ";
+		DB::update($req1, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'ETP'=>$ETP]);
+                
+                $req2 = "UPDATE lignefraisforfait SET quantite=:KM WHERE idVisiteur=:idVisiteur AND mois=:mois AND idFraisForfait='KM' ";
+		DB::update($req2, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'KM'=>$KM]);
+                
+                $req3 = "UPDATE lignefraisforfait SET quantite=:NUI WHERE idVisiteur=:idVisiteur AND mois=:mois AND idFraisForfait='NUI' ";
+		DB::update($req3, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'NUI'=>$NUI]);
+                
+                $req4 = "UPDATE lignefraisforfait SET quantite=:REP WHERE idVisiteur=:idVisiteur AND mois=:mois AND idFraisForfait='REP' ";
+		DB::update($req4, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'REP'=>$REP]);
+        }
+        
+        public function affFHF($idVisiteur,$mois,$id,$date,$montant)
+        {
+                $req = "SELECT id, idVisiteur, mois, libelle, date, montant FROM lignefraishorsforfait WHERE idVisiteur=:idVisiteur AND mois=:mois AND id=:id AND date=:date AND montant=:montant ";
+		$lesLignes = DB::select($req, ['idVisiteur'=>$idVisiteur,'mois'=>$mois,'id'=>$id,'date'=>$date,'montant'=>$montant]);
+                return $lesLignes;
+        }
+        
+        public function supprimerFHF($id, $txt)
+        {
+            	$req = "UPDATE lignefraishorsforfait SET codeSuppression='s', motifSuppression=:txt WHERE id=:id ";
+		$lesLignes = DB::select($req, ['id'=>$id, 'txt'=>$txt]);
+                return $lesLignes;
+        }
+        
+        
          public function majInfo($login,$adr,$cp,$ville,$mail, $tel){
 		$req = "update utilisateurs set adresse = :adr, cp= :cp,ville= :ville, mail= :mail, ntel= :tel where login= :login";
 		DB::update($req, ['adr'=>$adr,'cp'=>$cp,'ville'=>$ville,'mail'=>$mail,'tel'=>$tel, 'login'=>$login]);

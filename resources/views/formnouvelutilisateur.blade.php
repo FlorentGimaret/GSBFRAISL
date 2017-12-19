@@ -32,7 +32,7 @@
             <div class="form-group">
             <label class="col-md-3 control-label">code postal :  </label>
             <div class="col-md-6 col-md-3">
-                <input type="text" name="cp" ng-model="cp" value="{{$cp}}" class="form-control" placeholder="cp" required pattern="[0-9]{5}" title="Votre code postal doit contenir 5 chiffres"/>
+                <input type="text" name="cp" ng-model="cp" value="{{$cp}}" class="form-control" placeholder="cp"  pattern="[0-9]{5}" title="Votre code postal doit contenir 5 chiffres"required/>
             </div>
         </div>
             <div class="form-group">
@@ -57,7 +57,7 @@
         <div class="form-group">
             <label class="col-md-3 control-label">numero téléphone : </label>
             <div class="col-md-6 col-md-3">
-                <input type="number" name="ntel" ng-model="ntel" value="{{$ntel}}" class="form-control" placeholder="telephone" required pattern="(?=.*[0-9]).{10}">
+                <input type="number" name="ntel" ng-model="ntel" value="{{$ntel}}" class="form-control" placeholder="telephone"  pattern="(?=.*[0-9]){10}" title="Votre numéro de téléphone doit contenir 10 chiffres"required>
             </div>
         </div>
        
