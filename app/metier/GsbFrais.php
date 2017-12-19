@@ -291,11 +291,11 @@ public function getInfosUtilisateurs($login, $mdp){
         }
         
         public function VisiteursFichesClo(){
-		$req = "SELECT utilisateurs.id, utilisateurs.nom, utilisateurs.prenom, mois, montantValide, nbJustificatifs
+		$req = 'SELECT utilisateurs.id, utilisateurs.nom, utilisateurs.prenom, mois, montantValide, nbJustificatifs
                 FROM utilisateurs INNER JOIN fichefrais ON utilisateurs.id = fichefrais.idVisiteur
-		WHERE utilisateurs.statut LIKE 'v'
-                AND fichefrais.idEtat = 'CL'
-		ORDER BY utilisateurs.nom ASC";
+		WHERE fichefrais.idEtat = "CL"
+                AND  utilisateurs.statut LIKE "v"
+		ORDER BY utilisateurs.nom ASC';
 		$lesLignes = DB::select($req);
 		return $lesLignes;
 	}
